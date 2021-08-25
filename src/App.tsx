@@ -4,6 +4,7 @@ import { useGetCurrencyQuery } from './api/api'
 import { useDispatch, useSelector } from 'react-redux'
 import { getCurrency } from './store/reducers/currency/currencyReducer'
 import { RootState } from './store/store'
+import SelectCountry from './components/SelectCountry'
 
 const App = () => {
   const { data, isLoading, isSuccess } = useGetCurrencyQuery('fd')
@@ -20,9 +21,7 @@ const App = () => {
         <div>loading</div>
       ) : (
         <div>
-          {dat?.map((curr: { currencyCodeA: number }, index: number) => {
-            return <div key={index}>{curr.currencyCodeA}</div>
-          })}
+          <SelectCountry />
         </div>
       )}
     </div>

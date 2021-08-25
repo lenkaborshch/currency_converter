@@ -9,14 +9,25 @@ type Data = {
   rateCross: number
 }
 
+type Currency = {
+  code: number
+  rate: number
+}
+
 type InitState = {
   data: Data[]
+  currencies: Currency[]
+  mainCurrencies: Currency[]
+  currencyFrom: Currency | null
   isLoading: boolean
   isSuccess: boolean
 }
 
 const initialState: InitState = {
   data: [],
+  currencies: [],
+  mainCurrencies: [],
+  currencyFrom: null,
   isLoading: false,
   isSuccess: false
 }
@@ -26,7 +37,16 @@ const currency = createSlice({
   initialState,
   reducers: {
     getCurrency: (state, action: PayloadAction<{ data: Data[] }>) => {
-      state.data = action.payload.data.filter((el) => !!el.rateSell)
+      const listToUAH = action.payload.data.filter((el) => el.currencyCodeB === 980)
+      state.data = listToUAH
+      state.currencies = listToUAH.map((el) => ({
+        code: el.currencyCodeA,
+        rate: el.rateCross || el.rateSell
+      }))
+      state.mainCurrencies = listToUAH.slice(0, 4).map((el) => ({
+        code: el.currencyCodeA,
+        rate: el.rateCross || el.rateSell
+      }))
     }
   }
 })
